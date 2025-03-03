@@ -1,0 +1,87 @@
+﻿@page "/"
+@using SixLabors.ImageSharp.Formats.Png
+@using Color = SixLabors.ImageSharp.Color
+
+<!-- On-screen content (hidden in print mode) -->
+<div class="container my-5 d-print-none">
+    <h3 class="text-center mb-4">QR Code Generator</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label for="qrInput" class="form-label">Enter values (separated by comma or new line):</label>
+                <textarea id="qrInput" @bind="_inputText" class="form-control" rows="5" placeholder="Value 1, Value 2, Value 3"></textarea>
+            </div>
+            <button @onclick="GenerateQrCodes" class="btn btn-primary">Generate &amp; Print QR Codes</button>
+            <a href="/settings" class="btn btn-secondary ms-2">Settings</a>
+        </div>
+    </div>
+</div>
+
+@if (_qrCodeImages.Any())
+{
+    <!-- Print-only content: each QR code on its own page -->
+    <div class="d-none d-print-block">
+        @foreach (var qr in _qrCodeImages)
+        {
+            <div class="print-page" style="--qr-size: @(PrintSizeInInches)in;">
+                <img src="data:image/png;base64,@qr" class="print-qr" alt="QR Code" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+  private string? _inputText;
+  private List<string> _qrCodeImages = [];
+
+  // Convert the desired printed size from centimeters to inches (1 cm ≈ 0.393701 in)
+  private double PrintSizeInInches => SettingsService.PrintSizeCm * 0.393701;
+
+  private async Task GenerateQrCodes()
+  {
+      if (string.IsNullOrWhiteSpace(_inputText))
+      {
+          _qrCodeImages.Clear();
+          return;
+      }
+
+      // Split input by comma or newline; remove empty entries and trim
+      var values = _inputText.Split([',', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries)
+                             .Select(x => x.Trim())
+                             .Where(x => !string.IsNullOrEmpty(x))
+                             .ToList();
+
+      _qrCodeImages = [];
+
+      foreach (var value in values)
+      {
+          // Convert the QR code color from settings (default to black if invalid)
+          Color qrColor;
+          try
+          {
+              qrColor = Color.ParseHex(SettingsService.QrCodeColorInput);
+          }
+          catch
+          {
+              qrColor = Color.Black;
+          }
+
+          var qrGenerator = new QRCodeGenerator();
+          var qrCodeData = qrGenerator.CreateQrCode(value, QRCodeGenerator.ECCLevel.Q);
+          var qrCode = new QRCode(qrCodeData);
+          
+          // Generate the QR code graphic with the specified dark color and white background; no quiet zones
+          using var bitmap = qrCode.GetGraphic(20, darkColor: qrColor, lightColor: Color.White, drawQuietZones: false);
+
+          using var ms = new MemoryStream();
+          await bitmap.SaveAsync(ms, new PngEncoder());
+          var base64 = Convert.ToBase64String(ms.ToArray());
+          _qrCodeImages.Add(base64);
+      }
+
+      await InvokeAsync(StateHasChanged);
+      
+      // After generating QR codes, immediately open the print dialog
+      await JS.InvokeVoidAsync("window.print");
+  }
+}

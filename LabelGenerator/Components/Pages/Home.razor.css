@@ -1,0 +1,36 @@
+/* Remove default page margins */
+@page {
+    margin: 0;
+}
+@media print {
+    /* Hide everything except print content */
+    body * {
+        visibility: hidden;
+    }
+    /* Make print content visible */
+    .print-page, .print-page * {
+        visibility: visible;
+    }
+    /* Each print page fills one full page */
+    .print-page {
+        width: 100%;
+        height: 100vh; /* Exactly one viewport height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box;
+        page-break-after: always;
+    }
+    /* Remove page break after the last element */
+    .print-page:last-child {
+        page-break-after: auto;
+    }
+    /* QR code image size set via CSS variable */
+    .print-qr {
+        width: var(--qr-size);
+        height: var(--qr-size);
+        object-fit: contain;
+    }
+}
