@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <div class="mb-3">
                 <label for="qrInput" class="form-label">Enter values (separated by comma or new line):</label>
-                <textarea id="qrInput" @bind="_inputText" class="form-control" rows="5" placeholder="Value 1, Value 2, Value 3"></textarea>
+                <textarea id="qrInput" @bind="_inputText" class="form-control" rows="15" placeholder="Input values here"></textarea>
             </div>
             <button @onclick="GenerateQrCodes" class="btn btn-primary">Generate &amp; Print QR Codes</button>
             <a href="/settings" class="btn btn-secondary ms-2">Settings</a>
@@ -20,10 +20,10 @@
 @if (_qrCodeImages.Any())
 {
     <!-- Print-only content: each QR code on its own page -->
-    <div class="d-none d-print-block">
+    <div class="@($"d-none {(SettingsService.SingleQrPerPage ? "d-print-block" : "d-print-flex flex-wrap")}")">
         @foreach (var qr in _qrCodeImages)
         {
-            <div class="print-page" style="--qr-size: @(PrintSizeInInches)in;">
+            <div class="@($"print-page {(SettingsService.SingleQrPerPage ? "print-page-single" : "print-page-multiple")}")" style="--qr-size: @(PrintSizeInInches)in;">
                 <img src="data:image/png;base64,@qr.Base64Image" class="print-qr" alt="QR Code" />
                 <span class="qr-label">@qr.Value</span>
             </div>
