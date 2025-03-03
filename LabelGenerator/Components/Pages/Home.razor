@@ -24,7 +24,8 @@
         @foreach (var qr in _qrCodeImages)
         {
             <div class="print-page" style="--qr-size: @(PrintSizeInInches)in;">
-                <img src="data:image/png;base64,@qr" class="print-qr" alt="QR Code" />
+                <img src="data:image/png;base64,@qr.Base64Image" class="print-qr" alt="QR Code" />
+                <span class="qr-label">@qr.Value</span>
             </div>
         }
     </div>
@@ -32,7 +33,7 @@
 
 @code {
   private string? _inputText;
-  private List<string> _qrCodeImages = [];
+  private List<(string Base64Image, string Value)> _qrCodeImages = [];
 
   // Convert the desired printed size from centimeters to inches (1 cm ≈ 0.393701 in)
   private double PrintSizeInInches => SettingsService.PrintSizeCm * 0.393701;
@@ -76,7 +77,7 @@
           using var ms = new MemoryStream();
           await bitmap.SaveAsync(ms, new PngEncoder());
           var base64 = Convert.ToBase64String(ms.ToArray());
-          _qrCodeImages.Add(base64);
+          _qrCodeImages.Add((base64, value));
       }
 
       await InvokeAsync(StateHasChanged);

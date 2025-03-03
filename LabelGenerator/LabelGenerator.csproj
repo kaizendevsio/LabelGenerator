@@ -20,6 +20,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
         <Nullable>enable</Nullable>
+        <InvariantGlobalization>true</InvariantGlobalization>
 
         <!-- Display name -->
         <ApplicationTitle>LabelGenerator</ApplicationTitle>
