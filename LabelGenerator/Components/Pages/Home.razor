@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 <SectionContent SectionName="@Sections.Header">
-    <MudText Typo="Typo.h4" Align="Align.Left" Class="mb-4">
+    <MudText Typo="Typo.h4" Align="Align.Left" Class="mb-4 mt-4">
         Generate QR
     </MudText>
 </SectionContent>
@@ -37,11 +37,11 @@
 @if (PersistenceService.QrCodeItems.Any())
 {
     <!-- Print-only content: each QR code on its own page -->
-    <div class="@($"d-none {(SettingsService.SingleQrPerPage ? "d-print-block" : "d-print-flex flex-wrap")}")"
+    <div class="@($"d-none {(SettingsService.UsePrinterDefaults ? "d-print-block" : "d-print-flex flex-wrap")}")"
          style="--qr-size: @(SettingsService.QrSize.LongestSide?.Centimeters ?? 0)cm; --page-width: @(SettingsService.PageSize.Width?.Centimeters ?? 0)cm; --page-height: @(SettingsService.PageSize.Height?.Centimeters ?? 0)cm;">
         @foreach (var qr in PersistenceService.QrCodeItems)
         {
-            <div class="@($"print-page {(SettingsService.SingleQrPerPage ? "print-page-single" : "print-page-multiple")}")">
+            <div class="@($"print-page {(SettingsService.UsePrinterDefaults ? "print-page-single" : "print-page-multiple")}")">
                 <img src="data:image/png;base64,@qr.Base64Image" class="print-qr" alt="QR Code" />
                 <span class="qr-label">@qr.Value</span>
             </div>

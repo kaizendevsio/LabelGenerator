@@ -1,13 +1,18 @@
 /* Remove default page margins */
 @page {
-    margin: 0;
-    size: var(--page-width) var(--page-height);
+    margin: 0!important;
+    padding: 0!important;
 }
 @media print {
     /* Hide everything except print content */
-    body * {
+    * {
         visibility: hidden!important;
     }
+    body{
+        margin: 0!important;
+        padding: 0!important;
+    }
+    
     /* Make print content visible */
     .print-page, .print-page * {
         visibility: visible!important;
@@ -49,8 +54,4 @@
         text-align: center;
         font-size: 13px;
     }
-}
-
-.abccc{
-    color: red;
 }
