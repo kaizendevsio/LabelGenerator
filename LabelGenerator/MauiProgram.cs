@@ -1,5 +1,6 @@
 ﻿using LabelGenerator.Services;
 using Microsoft.Extensions.Logging;
+using MudBlazor.Services;
 
 namespace LabelGenerator;
 
@@ -13,7 +14,9 @@ public static class MauiProgram
             .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
 
         builder.Services.AddMauiBlazorWebView();
-        builder.Services.AddSingleton<QrSettingsService>();
+        builder.Services.AddMudServices();
+        builder.Services.AddSingleton<SettingsService>();
+        builder.Services.AddSingleton<PersistenceService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

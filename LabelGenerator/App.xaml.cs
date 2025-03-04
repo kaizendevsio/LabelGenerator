@@ -9,6 +9,16 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new MainPage()) { Title = "LabelGenerator" };
+        const int newWidth = 800;
+        const int newHeight = 800;
+
+        var window = new Window(new MainPage())
+        {
+            Width = newWidth,
+            Height = newHeight,
+            Title = "ID1 Label Program"
+        };
+
+        return window;
     }
 }

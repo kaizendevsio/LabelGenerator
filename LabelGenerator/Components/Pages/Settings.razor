@@ -1,24 +1,63 @@
 @page "/settings"
 
-<div class="container my-5">
-    <h3 class="text-center mb-4">QR Code Settings</h3>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <!-- Input for printed size in cm -->
-            <div class="input-group mb-3">
-                <span class="input-group-text">Size (cm)</span>
-                <input type="number" min="1" step="0.1" @bind="SettingsService.PrintSizeCm" class="form-control" />
-            </div>
-            <!-- Input for QR code color -->
-            <div class="input-group mb-3">
-                <span class="input-group-text">QR Color</span>
-                <input type="text" @bind="SettingsService.QrCodeColorInput" class="form-control" placeholder="#000000" />
-            </div>
-            <div class="mb-3">
-                <input class="form-check-input" type="checkbox" @bind="SettingsService.SingleQrPerPage" id="flexCheckDefault">
-                <label for="flexCheckDefault">Single QR per page</label><br>
-            </div>
-            <a href="/" class="btn btn-primary">Back to Generator</a>
-        </div>
-    </div>
-</div>
+<MudContainer Class="my-5">
+
+    <SectionContent SectionName="@Sections.Header">
+        <MudButton Href="/"
+                   Color="Color.Primary"
+                   Variant="Variant.Text"
+                   StartIcon="@Icons.Material.Outlined.ChevronLeft">
+            Back
+        </MudButton>
+        
+        <MudText Typo="Typo.h4" Align="Align.Left" Class="mb-4">
+            Settings
+        </MudText>
+    </SectionContent>
+
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12" sm="6">
+            
+            <MudPaper Class="pa-4" 
+                      Elevation="0"
+                      Style="@($"background:{Colors.Gray.Lighten5};")">
+                <MudText Typo="Typo.h5">QR Code</MudText>
+                
+                <div class="d-flex flex-column gap-3 mt-2">
+                    <MudTextField T="string"
+                                  Label="Size"
+                                  @bind-Value="SettingsService.QrSize.DynamicWidth"
+                                  Margin="Margin.Dense" />
+
+                    <MudTextField T="string"
+                                  Label="Color"
+                                  @bind-Value="SettingsService.QrCodeColorInput"
+                                  Placeholder="#000000"
+                                  Margin="Margin.Dense" />
+                </div>
+            </MudPaper>
+
+            <MudPaper Class="pa-4 mt-4" 
+                      Elevation="0"
+                      Style="@($"background:{Colors.Gray.Lighten5};")">
+                <MudText Typo="Typo.h5">Page Size</MudText>
+
+                <div class="d-flex flex-column gap-3 mt-2">
+                    <MudTextField T="string"
+                                  Label="Width"
+                                  @bind-Value="SettingsService.PageSize.DynamicWidth"
+                                  Margin="Margin.Dense"/>
+
+                    <MudTextField T="string"
+                                  Label="Height"
+                                  @bind-Value="SettingsService.PageSize.DynamicHeight"
+                                  Margin="Margin.Dense"/>
+
+                    <MudSwitch @bind-Value="SettingsService.SingleQrPerPage"
+                               Color="Color.Primary"
+                               Label="Single QR per page"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

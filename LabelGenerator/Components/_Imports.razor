@@ -4,14 +4,22 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.Sections
 @using Microsoft.JSInterop
+
 @using LabelGenerator
 @using LabelGenerator.Components
+@using LabelGenerator.Data.Constants
+@using LabelGenerator.Services
 
+@using Color = MudBlazor.Color
+@using Size = MudBlazor.Size
+
+@using MudBlazor
 @using QRCoder
 @using System.IO
 @using System.Drawing
-@using LabelGenerator.Services
 
-@inject QrSettingsService SettingsService
+@inject SettingsService SettingsService
+@inject PersistenceService PersistenceService
 @inject IJSRuntime JS

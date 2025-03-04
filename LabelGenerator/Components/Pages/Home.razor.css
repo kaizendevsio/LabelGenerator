@@ -1,15 +1,16 @@
 /* Remove default page margins */
 @page {
     margin: 0;
+    size: var(--page-width) var(--page-height);
 }
 @media print {
     /* Hide everything except print content */
     body * {
-        visibility: hidden;
+        visibility: hidden!important;
     }
     /* Make print content visible */
     .print-page, .print-page * {
-        visibility: visible;
+        visibility: visible!important;
     }
     /* Each print page fills one full page */
     .print-page-single {
@@ -36,7 +37,6 @@
         align-items: center;
         margin: 10px !important;
         padding: 0 !important;
-        width: var(--qr-size);
     }
     /* QR code image size set via CSS variable */
     .print-qr {
@@ -49,4 +49,8 @@
         text-align: center;
         font-size: 13px;
     }
+}
+
+.abccc{
+    color: red;
 }
